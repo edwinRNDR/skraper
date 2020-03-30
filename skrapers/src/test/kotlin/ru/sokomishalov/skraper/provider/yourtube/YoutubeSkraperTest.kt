@@ -16,6 +16,7 @@
 package ru.sokomishalov.skraper.provider.yourtube
 
 import org.junit.Test
+import ru.sokomishalov.skraper.model.Video
 import ru.sokomishalov.skraper.provider.SkraperTck
 import ru.sokomishalov.skraper.provider.youtube.YoutubeSkraper
 import ru.sokomishalov.skraper.provider.youtube.getUserInfo
@@ -37,4 +38,13 @@ class YoutubeSkraperTest : SkraperTck() {
         assertPageInfo { skraper.getUserInfo(username = username) }
     }
 
+    @Test
+    fun `Check media resolving`() {
+        assertMediaResolved(Video("https://www.youtube.com/watch?v=9bZkp7q19f0"))
+    }
+
+    @Test
+    fun `Check media downloading`() {
+        assertMediaDownloaded(Video("https://youtu.be/fjUO7xaUHJQ"))
+    }
 }

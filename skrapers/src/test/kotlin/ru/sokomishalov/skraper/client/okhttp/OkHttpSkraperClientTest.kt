@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.sokomishalov.skraper.client.okhttp3
+package ru.sokomishalov.skraper.client.okhttp
 
 import ru.sokomishalov.skraper.SkraperClient
 import ru.sokomishalov.skraper.client.SkraperClientTck
@@ -22,6 +22,6 @@ import ru.sokomishalov.skraper.client.SkraperClientTck
 /**
  * @author sokomishalov
  */
-class Okhttp3SkraperClientTest : SkraperClientTck() {
-    override val client: SkraperClient = OkHttp3SkraperClient()
+class OkHttpSkraperClientTest : SkraperClientTck() {
+    override val client: SkraperClient = OkHttpSkraperClient()
 }

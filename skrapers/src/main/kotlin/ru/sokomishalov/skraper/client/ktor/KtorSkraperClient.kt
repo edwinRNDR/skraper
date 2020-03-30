@@ -16,16 +16,20 @@
 package ru.sokomishalov.skraper.client.ktor
 
 import io.ktor.client.HttpClient
+import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.request
+import io.ktor.client.statement.HttpResponse
 import io.ktor.content.ByteArrayContent
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders.UnsafeHeadersList
 import io.ktor.http.HttpMethod
-import io.ktor.http.takeFrom
+import io.ktor.util.cio.writeChannel
+import io.ktor.utils.io.copyAndClose
 import ru.sokomishalov.skraper.SkraperClient
 import ru.sokomishalov.skraper.client.HttpMethodType
 import ru.sokomishalov.skraper.model.URLString
+import java.io.File
 
 class KtorSkraperClient(
         private val client: HttpClient = DEFAULT_CLIENT
@@ -37,14 +41,9 @@ class KtorSkraperClient(
             headers: Map<String, String>,
             body: ByteArray?
     ): ByteArray? {
-        return client.request {
-            this.url.takeFrom(url)
+        return client.request(urlString = url) {
             this.method = HttpMethod.parse(method.name)
-            headers
-                    .filterKeys { it !in UnsafeHeadersList }
-                    .forEach { (k, v) ->
-                        header(k, v)
-                    }
+            headers.filterKeys { it !in UnsafeHeadersList }.forEach { (k, v) -> header(k, v) }
             body?.let {
                 this.body = ByteArrayContent(
                         bytes = it,
@@ -52,6 +51,14 @@ class KtorSkraperClient(
                 )
             }
         }
+    }
+
+    override suspend fun download(
+            url: URLString,
+            destFile: File
+    ) {
+        val response = client.get<HttpResponse>(urlString = url)
+        response.content.copyAndClose(destFile.writeChannel())
     }
 
     companion object {

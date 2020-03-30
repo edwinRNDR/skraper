@@ -13,22 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("ReactorUnusedPublisher")
+@file:Suppress("ReactorUnusedPublisher", "ReactiveStreamsUnusedPublisher")
 
-package ru.sokomishalov.skraper.client.reactornetty
+package ru.sokomishalov.skraper.client.netty
 
 import io.netty.handler.codec.http.HttpMethod
 import io.netty.handler.ssl.SslContextBuilder
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory
 import kotlinx.coroutines.reactive.awaitFirstOrNull
+import kotlinx.coroutines.reactive.collect
 import reactor.core.publisher.Mono
 import reactor.netty.ByteBufFlux
 import reactor.netty.ByteBufMono
 import reactor.netty.http.client.HttpClient
 import ru.sokomishalov.skraper.SkraperClient
 import ru.sokomishalov.skraper.client.HttpMethodType
+import ru.sokomishalov.skraper.internal.nio.aWrite
 import ru.sokomishalov.skraper.model.URLString
+import java.io.File
+import java.nio.channels.AsynchronousFileChannel
+import java.nio.file.StandardOpenOption.*
 import kotlin.text.Charsets.UTF_8
+
 
 /**
  * @author sokomishalov
@@ -53,6 +59,20 @@ class ReactorNettySkraperClient(
                 })
                 .responseSingle { _, u -> u.asByteArray() }
                 .awaitFirstOrNull()
+    }
+
+    override suspend fun download(
+            url: URLString,
+            destFile: File
+    ) {
+        AsynchronousFileChannel.open(destFile.toPath(), setOf(WRITE, TRUNCATE_EXISTING, CREATE), null).use { afc ->
+            client
+                    .get()
+                    .uri(url)
+                    .responseContent()
+                    .asByteBuffer()
+                    .collect { afc.aWrite(it, afc.size()) }
+        }
     }
 
     companion object {

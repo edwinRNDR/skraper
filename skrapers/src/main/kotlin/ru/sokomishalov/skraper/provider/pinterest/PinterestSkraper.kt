@@ -20,6 +20,7 @@ import ru.sokomishalov.skraper.Skraper
 import ru.sokomishalov.skraper.SkraperClient
 import ru.sokomishalov.skraper.client.jdk.DefaultBlockingSkraperClient
 import ru.sokomishalov.skraper.fetchDocument
+import ru.sokomishalov.skraper.fetchMediaWithOpenGraphMeta
 import ru.sokomishalov.skraper.internal.number.div
 import ru.sokomishalov.skraper.internal.serialization.*
 import ru.sokomishalov.skraper.model.*
@@ -69,6 +70,13 @@ class PinterestSkraper @JvmOverloads constructor(
                     description = getString("profile.about"),
                     avatarsMap = extractLogoMap()
             )
+        }
+    }
+
+    override suspend fun resolve(media: Media): Media {
+        return when (media) {
+            is Image -> client.fetchMediaWithOpenGraphMeta(media)
+            else -> media
         }
     }
 

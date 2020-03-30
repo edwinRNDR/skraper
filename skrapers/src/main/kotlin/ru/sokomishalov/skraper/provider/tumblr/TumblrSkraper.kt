@@ -23,6 +23,7 @@ import ru.sokomishalov.skraper.Skraper
 import ru.sokomishalov.skraper.SkraperClient
 import ru.sokomishalov.skraper.client.jdk.DefaultBlockingSkraperClient
 import ru.sokomishalov.skraper.fetchDocument
+import ru.sokomishalov.skraper.fetchMediaWithOpenGraphMeta
 import ru.sokomishalov.skraper.internal.jsoup.getFirstElementByAttributeValue
 import ru.sokomishalov.skraper.internal.jsoup.getFirstElementByClass
 import ru.sokomishalov.skraper.internal.jsoup.getFirstElementByTag
@@ -49,6 +50,10 @@ class TumblrSkraper @JvmOverloads constructor(
         val page = getNonUserPage(path = path)
 
         return page.extractPageInfo()
+    }
+
+    override suspend fun resolve(media: Media): Media {
+        return client.fetchMediaWithOpenGraphMeta(media)
     }
 
     internal suspend fun getUserPage(username: String): Document? {

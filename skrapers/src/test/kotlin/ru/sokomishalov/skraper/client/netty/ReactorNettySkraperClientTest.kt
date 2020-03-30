@@ -13,8 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.sokomishalov.skraper.internal.consts
+package ru.sokomishalov.skraper.client.netty
 
-const val DEFAULT_POSTS_LIMIT: Int = 50
-const val DEFAULT_USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36"
-const val DEFAULT_DOWNLOAD_BUFFER_SIZE = 8 * 1024
+import ru.sokomishalov.skraper.SkraperClient
+import ru.sokomishalov.skraper.client.SkraperClientTck
+
+
+/**
+ * @author sokomishalov
+ */
+class ReactorNettySkraperClientTest : SkraperClientTck() {
+    override val client: SkraperClient = ReactorNettySkraperClient()
+}

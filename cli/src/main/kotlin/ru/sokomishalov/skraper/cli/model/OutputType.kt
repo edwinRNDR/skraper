@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.sokomishalov.skraper.cli
+package ru.sokomishalov.skraper.cli.model
 
 /**
  * @author sokomishalov
  */
 enum class OutputType(val extension: String) {
-    LOG(".log"),
-    CSV(".csv"),
-    JSON(".json"),
-    XML(".xml"),
-    YAML(".yaml")
+    LOG("log"),
+    CSV("csv"),
+    JSON("json"),
+    XML("xml"),
+    YAML("yaml")
 }

@@ -16,6 +16,8 @@
 package ru.sokomishalov.skraper.provider.ninegag
 
 import org.junit.Test
+import ru.sokomishalov.skraper.model.Image
+import ru.sokomishalov.skraper.model.Video
 import ru.sokomishalov.skraper.provider.SkraperTck
 
 /**
@@ -60,5 +62,16 @@ class NinegagSkraperTest : SkraperTck() {
     @Test
     fun `Check topic info`() {
         assertPageInfo { skraper.getTopicInfo(topic = topic) }
+    }
+
+    @Test
+    fun `Check media resolving`() {
+        assertMediaResolved(Video("https://9gag.com/gag/a9RxgGZ"))
+        assertMediaResolved(Image("https://9gag.com/gag/aQ1LGEq"))
+    }
+
+    @Test
+    fun `Check media downloading`() {
+        assertMediaDownloaded(Video("https://9gag.com/gag/a9RxgGZ"))
     }
 }

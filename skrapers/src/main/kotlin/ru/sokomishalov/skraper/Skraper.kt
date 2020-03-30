@@ -30,7 +30,7 @@ interface Skraper {
     val baseUrl: URLString
 
     /**
-     * @return http client for fetching web pages, images and json from network
+     * @return http client for fetching web pages, media and json from network
      */
     val client: SkraperClient get() = DefaultBlockingSkraperClient
 
@@ -54,4 +54,10 @@ interface Skraper {
      * @return list of posts
      */
     suspend fun getPosts(path: String, limit: Int = DEFAULT_POSTS_LIMIT): List<Post>
+
+    /**
+     * @param media with provider relative url
+     * @return media with direct url
+     */
+    suspend fun resolve(media: Media): Media
 }

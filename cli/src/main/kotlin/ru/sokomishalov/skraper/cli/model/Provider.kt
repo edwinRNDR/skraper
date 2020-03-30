@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.sokomishalov.skraper.cli
+package ru.sokomishalov.skraper.cli.model
 
 import ru.sokomishalov.skraper.Skraper
-import ru.sokomishalov.skraper.client.ktor.KtorSkraperClient
+import ru.sokomishalov.skraper.client.spring.SpringReactiveSkraperClient
 import ru.sokomishalov.skraper.provider.facebook.FacebookSkraper
 import ru.sokomishalov.skraper.provider.flickr.FlickrSkraper
 import ru.sokomishalov.skraper.provider.ifunny.IFunnySkraper
@@ -31,20 +31,20 @@ import ru.sokomishalov.skraper.provider.twitter.TwitterSkraper
 import ru.sokomishalov.skraper.provider.vk.VkSkraper
 import ru.sokomishalov.skraper.provider.youtube.YoutubeSkraper
 
-private val DEFAULT_CLIENT = KtorSkraperClient()
+internal val CLIENT = SpringReactiveSkraperClient()
 
 enum class Provider(val skraper: Skraper) {
-    FACEBOOK(FacebookSkraper(client = DEFAULT_CLIENT)),
-    INSTAGRAM(InstagramSkraper(client = DEFAULT_CLIENT)),
-    TWITTER(TwitterSkraper(client = DEFAULT_CLIENT)),
-    YOUTUBE(YoutubeSkraper(client = DEFAULT_CLIENT)),
-    TWITCH(TwitchSkraper(client = DEFAULT_CLIENT)),
-    REDDIT(RedditSkraper(client = DEFAULT_CLIENT)),
-    NINEGAG(NinegagSkraper(client = DEFAULT_CLIENT)),
-    PINTEREST(PinterestSkraper(client = DEFAULT_CLIENT)),
-    FLICKR(FlickrSkraper(client = DEFAULT_CLIENT)),
-    TUMBLR(TumblrSkraper(client = DEFAULT_CLIENT)),
-    IFUNNY(IFunnySkraper(client = DEFAULT_CLIENT)),
-    VK(VkSkraper(client = DEFAULT_CLIENT)),
-    PIKABU(PikabuSkraper(client = DEFAULT_CLIENT))
+    FACEBOOK(FacebookSkraper(client = CLIENT)),
+    INSTAGRAM(InstagramSkraper(client = CLIENT)),
+    TWITTER(TwitterSkraper(client = CLIENT)),
+    YOUTUBE(YoutubeSkraper(client = CLIENT)),
+    TWITCH(TwitchSkraper(client = CLIENT)),
+    REDDIT(RedditSkraper(client = CLIENT)),
+    NINEGAG(NinegagSkraper(client = CLIENT)),
+    PINTEREST(PinterestSkraper(client = CLIENT)),
+    FLICKR(FlickrSkraper(client = CLIENT)),
+    TUMBLR(TumblrSkraper(client = CLIENT)),
+    IFUNNY(IFunnySkraper(client = CLIENT)),
+    VK(VkSkraper(client = CLIENT)),
+    PIKABU(PikabuSkraper(client = CLIENT))
 }

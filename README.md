@@ -33,6 +33,10 @@ Unfortunately, each web-site is subject to change without any notice so the tool
 If that happens, please let me know via an issue or some message. 
 
 # Cli tool
+Cli tool allows to:
+- download media with flag `--media-only` from almost all presented sources.
+- scrape posts meta information
+
 Requirements: 
 - Java: 1.8 +
 - Maven (optional)
@@ -48,32 +52,61 @@ Usage:
 ```
 
 ```text
-usage: [-h] PROVIDER PATH [-n LIMIT] [-t TYPE] [-o OUTPUT]
+usage: [-h] PROVIDER PATH [-n LIMIT] [-t TYPE] [-o OUTPUT] [-m]
+       [--parallel-downloads PARALLEL_DOWNLOADS]
 
 optional arguments:
-  -h, --help        show this help message and exit
+  -h, --help                                show this help message and exit
 
-  -n LIMIT,         posts limit (50 by default)
-  --limit LIMIT
+  -n LIMIT, --limit LIMIT                   posts limit (50 by default)
 
-  -t TYPE,          output type, options: [log, csv, json, xml, yaml]
-  --type TYPE
+  -t TYPE, --type TYPE                      output type, options: [log, csv, json, xml, yaml]
 
-  -o OUTPUT,        output path
-  --output OUTPUT
+  -o OUTPUT, --output OUTPUT                output path
+
+  -m, --media-only                          scrape media only
+
+  --parallel-downloads PARALLEL_DOWNLOADS   amount of parallel downloads for media items if
+                                            enabled flag --media-only (4 by default)
 
 
 positional arguments:
-  PROVIDER          skraper provider, options: [facebook, instagram, twitter, youtube, twitch, reddit, 
-                    ninegag, pinterest, flickr, tumblr, ifunny, vk, pikabu]
+  PROVIDER                                  skraper provider, options: [facebook, instagram,
+                                            twitter, youtube, twitch, reddit, ninegag, pinterest,
+                                            flickr, tumblr, ifunny, vk, pikabu]
 
-  PATH              path to user/community/channel/topic/trend
+  PATH                                      path to user/community/channel/topic/trend
+usage: [-h] PROVIDER PATH [-n LIMIT] [-t TYPE] [-o OUTPUT] [-m]
+       [--parallel-downloads PARALLEL_DOWNLOADS]
+
+optional arguments:
+  -h, --help                                show this help message and exit
+
+  -n LIMIT, --limit LIMIT                   posts limit (50 by default)
+
+  -t TYPE, --type TYPE                      output type, options: [log, csv, json, xml, yaml]
+
+  -o OUTPUT, --output OUTPUT                output path
+
+  -m, --media-only                          scrape media only
+
+  --parallel-downloads PARALLEL_DOWNLOADS   amount of parallel downloads for media items if
+                                            enabled flag --media-only (4 by default)
+
+
+positional arguments:
+  PROVIDER                                  skraper provider, options: [facebook, instagram,
+                                            twitter, youtube, twitch, reddit, ninegag, pinterest,
+                                            flickr, tumblr, ifunny, vk, pikabu]
+
+  PATH                                      path to user/community/channel/topic/trend
 ```
 
 Examples:
 ```bash
 ./skraper ninegag /hot 
 ./skraper reddit /r/memes -n 5 -t csv -o ./reddit/posts
+./skraper youtube /user/JetBrainsTV/videos --media-only -n 2
 ```
 
 # Kotlin Library
@@ -90,7 +123,7 @@ Maven:
     <dependency>
         <groupId>com.github.sokomishalov.skraper</groupId>
         <artifactId>skrapers</artifactId>
-        <version>0.3.0</version>
+        <version>0.4.0</version>
     </dependency>
 </dependencies>
 ```
@@ -101,7 +134,7 @@ repositories {
     maven { url("https://jitpack.io") }
 }
 dependencies {
-    implementation("com.github.sokomishalov.skraper:skrapers:0.3.0")
+    implementation("com.github.sokomishalov.skraper:skrapers:0.4.0")
 }
 ```
 
@@ -150,6 +183,7 @@ interface Skraper {
     suspend fun getProviderInfo(): ProviderInfo?
     suspend fun getPageInfo(path: String): PageInfo?
     suspend fun getPosts(path: String, limit: Int = DEFAULT_POSTS_LIMIT): List<Post>
+    suspend fun resolve(media: Media): Media
 }
 ```
 

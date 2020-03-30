@@ -13,18 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ru.sokomishalov.skraper.cli
+package ru.sokomishalov.skraper.cli.model
 
 import com.xenomachina.argparser.ArgParser
 import com.xenomachina.argparser.default
-import ru.sokomishalov.skraper.cli.OutputType.LOG
+import ru.sokomishalov.skraper.cli.model.OutputType.LOG
 import java.io.File
 
 class Args(parser: ArgParser) {
-    val provider by parser.positional(
+    val skraper by parser.positional(
             name = "PROVIDER",
             help = "skraper provider, options: ${Provider.values().contentToString().toLowerCase()}"
-    ) { Provider.valueOf(toUpperCase()) }
+    ) { Provider.valueOf(toUpperCase()).skraper }
 
     val path by parser.positional(
             name = "PATH",
@@ -34,15 +34,25 @@ class Args(parser: ArgParser) {
     val amount by parser.storing(
             "-n", "--limit",
             help = "posts limit (50 by default)"
-    ) { toInt() }.default(50)
+    ) { toInt() }.default { 50 }
 
     val outputType by parser.storing(
             "-t", "--type",
             help = "output type, options: ${OutputType.values().contentToString().toLowerCase()}"
-    ) { OutputType.valueOf(toUpperCase()) }.default(LOG)
+    ) { OutputType.valueOf(toUpperCase()) }.default { LOG }
 
     val output by parser.storing(
             "-o", "--output",
             help = "output path"
     ) { File(this) }.default { File("") }
+
+    val onlyMedia by parser.flagging(
+            "-m", "--media-only",
+            help = "scrape media only"
+    )
+
+    val parallelDownloads by parser.storing(
+            "--parallel-downloads",
+            help = "amount of parallel downloads for media items if enabled flag --media-only (4 by default)"
+    ) { toInt() }.default { 4 }
 }
